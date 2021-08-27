@@ -14,12 +14,12 @@ import java.util.*;
  * at https://github.com/BookMC/annotation-processor-configuration
  */
 public class BookMixinObfuscationService implements IObfuscationService {
-    public static final String MAPPINGS_JSON_INPUT = "mappingsJsonInput";
-    public static final String GENERATED_OUTPUT = "generatedOutput";
+    public static final String IN_MAP_FILE = "inMapFile";
+    public static final String OUT_MAP_FILE = "outMapFile";
 
     @Override
     public Set<String> getSupportedOptions() {
-        return Set.of(MAPPINGS_JSON_INPUT, GENERATED_OUTPUT);
+        return Set.of(IN_MAP_FILE, OUT_MAP_FILE);
     }
 
     @Override

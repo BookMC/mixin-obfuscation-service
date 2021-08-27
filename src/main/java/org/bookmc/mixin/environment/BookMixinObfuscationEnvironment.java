@@ -17,7 +17,7 @@ public class BookMixinObfuscationEnvironment extends ObfuscationEnvironment {
 
     @Override
     protected IMappingProvider getMappingProvider(Messager messager, Filer filer) {
-        return new BookMappingProvider(messager, filer);
+        return new BookMappingProvider();
     }
 
     @Override

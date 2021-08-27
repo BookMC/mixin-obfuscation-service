@@ -1,22 +1,22 @@
 package org.bookmc.mixin.mapping;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.gson.Gson;
 import org.bookmc.mixin.data.Mappings;
 import org.spongepowered.asm.obfuscation.mapping.common.MappingField;
 import org.spongepowered.asm.obfuscation.mapping.common.MappingMethod;
-import org.spongepowered.tools.obfuscation.mapping.common.MappingProvider;
+import org.spongepowered.tools.obfuscation.mapping.IMappingProvider;
 
-import javax.annotation.processing.Filer;
-import javax.annotation.processing.Messager;
 import java.io.*;
 import java.util.Map;
 
-public class BookMappingProvider extends MappingProvider {
+public class BookMappingProvider implements IMappingProvider {
     private final Gson gson = new Gson();
 
-    public BookMappingProvider(Messager messager, Filer filer) {
-        super(messager, filer);
-    }
+    public final BiMap<String, String> classesMap = HashBiMap.create();
+    public final BiMap<MappingField, MappingField> fieldMap = HashBiMap.create();
+    public final BiMap<MappingMethod, MappingMethod> methodMap = HashBiMap.create();
 
     @Override
     public void read(File input) throws IOException {
@@ -24,7 +24,7 @@ public class BookMappingProvider extends MappingProvider {
             Mappings mappings = gson.fromJson(reader, Mappings.class);
 
             for (Map.Entry<String, String> clazz : mappings.getClasses().entrySet()) {
-                classMap.put(clazz.getKey(), clazz.getValue());
+                classesMap.put(clazz.getKey(), clazz.getValue());
             }
 
             for (Map.Entry<String, String> method : mappings.getMethods().entrySet()) {
@@ -58,4 +58,35 @@ public class BookMappingProvider extends MappingProvider {
         }
     }
 
+    @Override
+    public void clear() {
+        this.classesMap.clear();
+        this.fieldMap.clear();
+        this.methodMap.clear();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.classesMap.isEmpty() && this.fieldMap.isEmpty() && this.methodMap.isEmpty();
+    }
+
+    @Override
+    public MappingMethod getMethodMapping(MappingMethod method) {
+        return this.methodMap.getOrDefault(method, method);
+    }
+
+    @Override
+    public MappingField getFieldMapping(MappingField field) {
+        return this.fieldMap.getOrDefault(field, field);
+    }
+
+    @Override
+    public String getClassMapping(String className) {
+        return this.classesMap.getOrDefault(className, className);
+    }
+
+    @Override
+    public String getPackageMapping(String packageName) {
+        return packageName;
+    }
 }
