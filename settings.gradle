@@ -1,2 +1,12 @@
-rootProject.name = 'mixin-obfuscation-service'
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        maven {
+            url "https://maven.bookmc.org"
+        }
+    }
+}
+
+rootProject.name = "mixin-obfuscation-service"
 

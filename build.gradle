@@ -1,9 +1,20 @@
 plugins {
     id "java"
+    id "maven-publish"
+    id "org.bookmc.buildtools" version "0.3.3+build.15"
+    id "com.github.johnrengelman.shadow" version "7.0.0"
+}
+
+ext {
+    def env = System.getenv()
+    buildNumber = env.BUILD_NUMBER
+    local = buildNumber == null
+    branch = "git rev-parse --abbrev-ref HEAD".execute().text.trim()
 }
 
 group "org.bookmc"
-version "0.0.1"
+version "0.1.0${branch != "main" ? "-$branch" : ""}+${buildNumber ? "build.$buildNumber" : "local"}"
+
 
 java {
     toolchain {
@@ -30,7 +41,6 @@ dependencies {
         exclude module: "gson"
     }
 
-    implementation "net.fabricmc:tiny-mappings-parser:0.3.0+build.17"
     implementation "com.google.code.gson:gson:2.8.8"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.0"
@@ -39,4 +49,40 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            def env = System.getenv()
+
+            boolean isEnvVarsAvailable = env.containsKey("MAVEN_USER") && env.containsKey("MAVEN_PASSWORD")
+
+            if (isEnvVarsAvailable) {
+                credentials {
+                    username env.get("MAVEN_USER")
+                    password env.get("MAVEN_PASSWORD")
+                }
+            }
+
+            url = local || !isEnvVarsAvailable ? "$buildDir/repository" : "https://maven.bookmc.org/releases/"
+        }
+    }
+
+    publications {
+        //noinspection GroovyAssignabilityCheck
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = "book-loader"
+                url = "https://github.com/BookMC/loader"
+
+                developers {
+                    developer {
+                        name = "ChachyDev"
+                    }
+                }
+            }
+        }
+    }
 }

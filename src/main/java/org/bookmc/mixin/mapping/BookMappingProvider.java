@@ -37,24 +37,25 @@ public class BookMappingProvider extends MappingProvider {
 
             for (Map.Entry<String, String> field : mappings.getFields().entrySet()) {
                 String[] keySplit = field.getKey().split(" ");
-                String[] valueSplit = field.getKey().split(" ");
+                String[] valueSplit = field.getValue().split(" ");
 
-                String deobfString = keySplit[0];
+                String deobfString = valueSplit[0];
                 int deobfNameIndex = deobfString.lastIndexOf('/');
-                String deobfName = deobfString.substring(deobfString.lastIndexOf('/') + 1);
-                String deobfOwner = deobfString.replace("/" + deobfName, "");
+                String deobfName = deobfString.substring(deobfNameIndex + 1);
+                String deobfOwner = deobfString.substring(0, deobfNameIndex);
 
                 String obfString = keySplit[0];
                 int obfNameIndex = obfString.lastIndexOf('/');
                 String obfName = obfString.substring(obfNameIndex + 1);
-                String obfOwner = obfString.replace("/" + obfName, "");
+                String obfOwner = obfString.substring(0, obfNameIndex);
 
                 if (keySplit.length == 1) {
                     fieldMap.put(new MappingField(deobfOwner, deobfName, null), new MappingField(obfOwner, obfName, null));
                 } else {
-                    fieldMap.put(new MappingField(deobfOwner, deobfName, keySplit[1]), new MappingField(obfOwner, obfName, valueSplit[1]));
+                    fieldMap.put(new MappingField(obfOwner, obfName, valueSplit[1]), new MappingField(deobfOwner, deobfName, keySplit[1]));
                 }
             }
         }
     }
+
 }

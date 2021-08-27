@@ -1,6 +1,7 @@
 package org.bookmc.mixin.environment;
 
 import org.bookmc.mixin.mapping.BookMappingProvider;
+import org.bookmc.mixin.mapping.BookMappingWriter;
 import org.spongepowered.tools.obfuscation.ObfuscationEnvironment;
 import org.spongepowered.tools.obfuscation.ObfuscationType;
 import org.spongepowered.tools.obfuscation.mapping.IMappingProvider;
@@ -21,6 +22,6 @@ public class BookMixinObfuscationEnvironment extends ObfuscationEnvironment {
 
     @Override
     protected IMappingWriter getMappingWriter(Messager messager, Filer filer) {
-        return null;
+        return new BookMappingWriter(messager, filer);
     }
 }
