@@ -1,13 +1,14 @@
 package org.bookmc.mixin;
 
 import org.bookmc.mixin.descriptor.BookMixinObfuscationTypeDescriptor;
-import org.bookmc.mixin.environment.BookMixinObfuscationEnvironment;
-import org.spongepowered.tools.obfuscation.SupportedOptions;
 import org.spongepowered.tools.obfuscation.interfaces.IMixinAnnotationProcessor;
 import org.spongepowered.tools.obfuscation.service.IObfuscationService;
 import org.spongepowered.tools.obfuscation.service.ObfuscationTypeDescriptor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 public class BookMixinObfuscationService implements IObfuscationService {
     public static final String MAPPINGS_JSON_INPUT = "mappingsJsonInput";
