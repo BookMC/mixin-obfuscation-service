@@ -2,7 +2,6 @@ plugins {
     id "java"
     id "maven-publish"
     id "org.bookmc.buildtools" version "0.3.3+build.15"
-    id "com.github.johnrengelman.shadow" version "7.0.0"
 }
 
 ext {
