@@ -22,14 +22,18 @@ public class BookMappingWriter extends MappingWriter {
         if (output != null) {
             try (PrintWriter writer = openFileWriter(output, type + " mappings")) {
                 JsonObject object = new JsonObject();
+
                 JsonObject fieldsObject = new JsonObject();
                 JsonObject methodsObject = new JsonObject();
+
                 for (IMappingConsumer.MappingSet.Pair<MappingField> field : fields) {
                     fieldsObject.addProperty(createFieldMapping(field.from), createFieldMapping(field.to));
                 }
+
                 for (IMappingConsumer.MappingSet.Pair<MappingMethod> method : methods) {
                     methodsObject.addProperty(createMethodMapping(method.from), createMethodMapping(method.to));
                 }
+
                 object.add("fields", fieldsObject);
                 object.add("methods", methodsObject);
                 writer.println(object);
